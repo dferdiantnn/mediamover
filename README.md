@@ -26,17 +26,17 @@ Sebuah skrip Python otomatis untuk memindahkan (menyedot) media (gambar dan vide
 * Koneksi internet yang stabil.
 * Akun Telegram dengan:
     * **API ID & API Hash:** Dapatkan dari [my.telegram.org](https://my.telegram.org/).
-    * **Keanggunaan di Grup Sumber:** Akun Telegram yang kamu gunakan harus menjadi anggota dari semua grup/channel sumber yang ingin kamu pantau.
+    * **Keanggotaan di Grup Sumber:** Akun Telegram yang kamu gunakan harus menjadi anggota dari semua grup/channel sumber yang ingin kamu pantau.
     * **Izin Mengirim Pesan:** Akun Telegram kamu harus memiliki izin untuk mengirim pesan ke channel tujuan.
 
 ### Instalasi
 
 1.  **Clone repositori ini:**
     ```bash
-    git clone [https://github.com/USERNAME_KAMU/NAMA_REPO_KAMU.git](https://github.com/USERNAME_KAMU/NAMA_REPO_KAMU.git)
-    cd NAMA_REPO_KAMU # Ganti dengan nama folder repositori kamu
+    git clone [https://github.com/dferdiantnn/mediamover.git](https://github.com/dferdiantnn/mediamover.git)
+    cd mediamover # Ganti dengan nama folder repositori kamu jika berbeda
     ```
-    *(Catatan: Jika ini belum di GitHub, langkah ini opsional. Kamu bisa langsung ke `cd ~/telegram_scripts` jika scriptnya ada di sana)*
+    *(Catatan: Jika script sudah ada di `~/telegram_scripts`, kamu bisa lewati langkah clone ini dan langsung ke `cd ~/telegram_scripts`)*
 
 2.  **Navigasi ke direktori script:**
     ```bash
@@ -61,7 +61,7 @@ Sebuah skrip Python otomatis untuk memindahkan (menyedot) media (gambar dan vide
     ```bash
     # Jika sudah menyiapkan launcher di ~/.local/bin/
     mediamover.sh 
-    # Atau secara langsung:
+    # Atau secara langsung (setelah mengaktifkan venv):
     # python mediamove.py
     ```
 2.  **Ikuti panduan di terminal:**
@@ -74,7 +74,7 @@ Sebuah skrip Python otomatis untuk memindahkan (menyedot) media (gambar dan vide
 
 3.  **Jalankan script lagi untuk memulai pemantauan:**
     ```bash
-    mediamover.sh # Atau python mediamove.py
+    mediamover.sh # Atau python mediamove.py (setelah mengaktifkan venv)
     ```
     Script akan menampilkan ringkasan informasi dan kemudian mulai beroperasi sebagai "perangkap" media baru.
 
@@ -101,5 +101,3 @@ Untuk menjaga script tetap berjalan meskipun kamu menutup koneksi SSH (misalnya 
 * Selalu patuhi **Kebijakan Privasi dan Ketentuan Layanan Telegram**. Penggunaan script ini sepenuhnya menjadi tanggung jawab Anda.
 * Pastikan akun Telegram yang terhubung dengan script ini memiliki **akses dan izin yang benar** ke semua grup sumber dan channel tujuan. Error seperti `PeerIdInvalidError` atau `Invalid object ID` hampir selalu disebabkan oleh masalah izin/keanggotaan.
 * Jika mengalami `TimeoutError` saat koneksi, periksa **koneksi internet** dan **pengaturan firewall** (misalnya UFW di Ubuntu) di perangkat Anda.
-
----
