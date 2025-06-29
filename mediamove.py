@@ -10,13 +10,16 @@ from telethon.errors.rpcerrorlist import PeerIdInvalidError, FloodWaitError, Aut
 CONFIG_FILE = 'config.json'
 
 # --- Default Konfigurasi ---
+# Ini akan digunakan jika file config.json tidak ditemukan atau kosong.
+# PENTING: Ubah nilai-nilai di bawah ini dengan data Anda yang sebenarnya,
+# atau masukkan melalui menu interaktif saat script dijalankan.
 default_config = {
-    'api_id': 24987577,
-    'api_hash': '75f1c34bde519069fbcb6fde05b65fbc',
-    'session_name': 'my_telegram_session',
-    'source_group_ids': [], # Contoh ID grup sumber default, dimulai kosong agar lebih jelas
-    'target_channel_id': -1002581798768, # Contoh ID channel tujuan default (pastikan minus jika supergroup/channel)
-    'processed_message_ids_file_base': 'processed_media_ids'
+    'api_id': 0, # GANTI DENGAN API ID ANDA dari my.telegram.org (angka)
+    'api_hash': "", # GANTI DENGAN API HASH ANDA dari my.telegram.org (string)
+    'session_name': 'my_telegram_session', # Nama file sesi untuk Telethon (contoh: my_telegram_session.session)
+    'source_group_ids': [], # Daftar ID grup/channel sumber Anda (kosongkan jika belum ada)
+    'target_channel_id': 0, # GANTI DENGAN ID channel tujuan Anda (harus angka, contoh: -1001234567890)
+    'processed_message_ids_file_base': 'processed_media_ids' # Nama dasar untuk file ID pesan yang sudah diproses
 }
 
 # Variabel global untuk konfigurasi yang sedang aktif dan client
@@ -241,7 +244,7 @@ async def change_target_channel_interactive():
 # --- Fungsi Loading Animation ---
 async def spinner(message, stop_event):
     # Menggunakan titik yang bertambah dan menghilang secara berurutan
-    spinner_chars = ['   ', '.  ', '.. ', '...']
+    spinner_chars = ['.  ', '.. ', '...', '   ']
     i = 0
     # Tambahkan buffer cukup besar untuk clear line
     clear_line_length = len(message) + 4 # 4 karena max len dari '...'
@@ -254,7 +257,6 @@ async def spinner(message, stop_event):
 
     sys.stdout.write('\r' + ' ' * clear_line_length + '\r') # Clear spinner line
     sys.stdout.flush()
-
 
 # --- Fungsi Utama Menu ---
 async def run_main_menu():
@@ -390,7 +392,13 @@ async def main():
     stop_spinner_event = asyncio.Event()
     spinner_task = None
     try:
-        spinner_task = asyncio.create_task(spinner("Menghubungkan ke Telegram", stop_spinner_event))
+        # Pengecekan awal API ID dan Hash
+        if config['api_id'] == 0 or config['api_hash'] == "":
+            print("[-] API ID atau API Hash belum dikonfigurasi. Silakan atur melalui menu.")
+            # Jangan memulai spinner jika belum dikonfigurasi
+        else:
+            spinner_task = asyncio.create_task(spinner("Menghubungkan ke Telegram", stop_spinner_event))
+
         await client.connect()
         stop_spinner_event.set() # Stop spinner
         if not await client.is_user_authorized():
@@ -429,6 +437,9 @@ async def main():
         if spinner_task: spinner_task.cancel()
         if 'spinner_task_auth' in locals() and spinner_task_auth: spinner_task_auth.cancel()
         print(f"[-] Error saat menghubungkan ke Telegram atau otorisasi: {e}")
+        # Tambahkan kondisi jika API ID atau Hash masih default/0
+        if config['api_id'] == 0 or config['api_hash'] == "":
+            print("[*] Catatan: API ID atau API Hash Anda mungkin belum diatur atau salah. Silakan periksa melalui menu.")
         print("[*] Pastikan API ID dan API Hash benar, koneksi internet stabil, dan tidak ada blokir firewall.")
         if client and client.is_connected():
             await client.disconnect()
@@ -455,3 +466,4 @@ if __name__ == '__main__':
         if client and client.is_connected():
             asyncio.run(client.disconnect())
             print("[*] Client Telegram terputus.")
+
